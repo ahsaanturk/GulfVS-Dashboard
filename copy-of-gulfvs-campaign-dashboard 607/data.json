@@ -1,0 +1,38 @@
+
+{
+  "companies": [
+    {
+      "id": "1",
+      "companyName": "Al-Futtaim Group",
+      "emails": ["hr@alfuttaim.ae", "finance@alfuttaim.ae"],
+      "phoneNumber": "+971 4 123 4567",
+      "tags": ["HR", "Retail"],
+      "location": "Dubai, UAE",
+      "notes": "Large conglomerate looking for payroll solutions.",
+      "createdAt": 1700000000000,
+      "isInterested": true
+    },
+    {
+      "id": "2",
+      "companyName": "NEOM Tech",
+      "emails": ["outreach@neom.com"],
+      "phoneNumber": "+966 1 888 9999",
+      "tags": ["Tech", "Admin"],
+      "location": "Tabuk, KSA",
+      "notes": "Potential for massive administrative support contract.",
+      "createdAt": 1700000010000,
+      "isInterested": false
+    }
+  ],
+  "logs": [
+    {
+      "id": "log1",
+      "companyId": "1",
+      "emailAddress": "hr@alfuttaim.ae",
+      "emailType": "First-time",
+      "dateSent": 1700000050000,
+      "note": "Initial introduction sent to the HR director.",
+      "completed": true
+    }
+  ]
+}
