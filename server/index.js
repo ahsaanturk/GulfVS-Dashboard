@@ -248,4 +248,9 @@ app.get('/api/sync/all', async (req, res) => {
 });
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Server listening on ${port}`));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => console.log(`Server listening on ${port}`));
+}
+
+export default app;
