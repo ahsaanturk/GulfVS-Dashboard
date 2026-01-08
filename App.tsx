@@ -16,6 +16,7 @@ import CompanyModal from './components/CompanyModal';
 import LogModal from './components/LogModal';
 import ConfirmModal from './components/ConfirmModal';
 import ConnectivityBadge from './components/ConnectivityBadge';
+import InstallPrompt from './components/InstallPrompt';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Dashboard);
@@ -30,6 +31,18 @@ const App: React.FC = () => {
   const [authUser, setAuthUser] = useState<AppUser | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // PWA Install State
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [logs, setLogs] = useState<EmailLog[]>([]);
@@ -312,6 +325,7 @@ const App: React.FC = () => {
         title={confirmConfig.title}
         message={confirmConfig.message}
       />
+      <InstallPrompt deferredPrompt={deferredPrompt} onInstall={() => setDeferredPrompt(null)} />
       <ConnectivityBadge />
     </div>
   );

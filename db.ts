@@ -82,29 +82,19 @@ class DatabaseService {
   private async checkRemote() {
     this.triedRemote = true;
     try {
+      // In production (Vercel), we trust the relative path /api/ping
+      // The localhost fallback caused security prompts on desktop and failures on mobile.
       const res = await fetch(`/api/ping`);
+
       if (res.ok) {
         this.remoteAvailable = true;
-        this.apiBase = '';
+        this.apiBase = ''; // Relative path
       } else {
-        const localRes = await fetch('http://localhost:4000/api/ping');
-        if (localRes.ok) {
-          this.remoteAvailable = true;
-          this.apiBase = 'http://localhost:4000';
-        }
-      }
-    } catch (e) {
-      try {
-        const localRes = await fetch('http://localhost:4000/api/ping');
-        if (localRes.ok) {
-          this.remoteAvailable = true;
-          this.apiBase = 'http://localhost:4000';
-        } else {
-          this.remoteAvailable = false;
-        }
-      } catch (ex) {
         this.remoteAvailable = false;
       }
+    } catch (e) {
+      // Network error or server down
+      this.remoteAvailable = false;
     }
     this.notifyStatusChange();
   }
