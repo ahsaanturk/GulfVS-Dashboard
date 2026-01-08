@@ -38,12 +38,20 @@ class DatabaseService {
   private setupNetworkListeners() {
     if (typeof window !== 'undefined') {
       window.addEventListener('online', async () => {
-        console.log('Network is online. Verifying connection and syncing...');
-        this.triedRemote = false; // reset check
+        console.log('Network is online. Starting re-sync sequence...');
+
+        // 1. Verify Connection
         await this.checkRemote();
         this.notifyStatusChange();
+
         if (this.remoteAvailable) {
+          console.log('1. Pushing offline changes to server...');
+          // 2. PUSH: Send local data to server first (to save offline work)
           await this.syncToRemote();
+
+          console.log('2. Pulling latest data from server...');
+          // 3. PULL: Get merged true state from server
+          await this.pullFullSync();
         }
       });
 
