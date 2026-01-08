@@ -196,11 +196,11 @@ class DatabaseService {
   startBackgroundSync() {
     if (this.syncInterval) clearInterval(this.syncInterval);
 
-    // 1. Connection Heartbeat (8s)
-    setInterval(() => this.checkRemote(), 8000);
+    // 1. Connection Heartbeat (5s)
+    setInterval(() => this.checkRemote(), 5000);
 
-    // 2. Data Sync (30s)
-    this.syncInterval = setInterval(() => this.smartSync(), 30000);
+    // 2. Data Sync (1s) - REAL TIME
+    this.syncInterval = setInterval(() => this.smartSync(), 1000);
   }
 
   async smartSync() {
