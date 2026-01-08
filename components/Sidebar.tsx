@@ -127,6 +127,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, currentPage, onPageChange, on
           </div>
 
           <button
+            onClick={() => db.requestNotificationPermission()}
+            className="w-full flex items-center justify-center space-x-2 bg-slate-800/40 hover:bg-slate-700/50 text-slate-400 hover:text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest backdrop-blur-sm transition-all border border-white/5 mb-4 group"
+          >
+            <span className="group-hover:scale-110 transition-transform">🔔</span>
+            <span>Enable Alerts</span>
+          </button>
+
+          <button
             onClick={() => onPageChange(Page.ImportExport)}
             className={`w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-300 ${currentPage === Page.ImportExport
               ? 'bg-accent/20 text-accent border border-accent/30'
