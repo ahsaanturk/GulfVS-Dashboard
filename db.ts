@@ -219,6 +219,20 @@ class DatabaseService {
 
         if (currentDataStr !== newDataStr) {
           console.log('Background sync: Data changed, updating UI.');
+
+          // NOTIFICATION LOGIC
+          // Check for NEW items from server
+          const newContacts = serverContacts.filter((sc: any) => !this.companies.find(c => c.id === sc.id));
+          const newLogs = serverLogs.filter((sl: any) => !this.logs.find(l => l.id === sl.id));
+
+          if (newContacts.length > 0) {
+            this.sendNotification(`New Contact${newContacts.length > 1 ? 's' : ''}`, `${newContacts[0].companyName} ${newContacts.length > 1 ? `and ${newContacts.length - 1} others` : ''} was added.`);
+          }
+
+          if (newLogs.length > 0) {
+            this.sendNotification(`New Log Entry`, `Action recorded for ${newLogs[0].emailAddress}`);
+          }
+
           this.companies = serverContacts;
           this.logs = serverLogs;
           this.save(true); // Save without triggering another remote push
@@ -227,6 +241,26 @@ class DatabaseService {
       }
     } catch (e) {
       console.warn('Background sync check failed', e);
+    }
+  }
+
+  // Permission Request
+  requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }
+
+  private sendNotification(title: string, body: string) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(title, {
+          body,
+          icon: '/favicon.ico' // Assuming favicon exists
+        });
+      } catch (e) {
+        console.error("Notification failed", e);
+      }
     }
   }
 
