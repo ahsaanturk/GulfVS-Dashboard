@@ -118,10 +118,10 @@ class DatabaseService {
     }
   }
 
-  async syncToRemote() {
-    if (!this.remoteAvailable) return;
+  async syncToRemote(): Promise<boolean> {
+    if (!this.remoteAvailable) return false;
     try {
-      await fetch(`${this.apiBase}/api/sync`, {
+      const res = await fetch(`${this.apiBase}/api/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -129,8 +129,10 @@ class DatabaseService {
           logs: this.logs
         })
       });
+      return res.ok;
     } catch (e) {
       console.warn('Remote sync failed', e);
+      return false;
     }
   }
 
