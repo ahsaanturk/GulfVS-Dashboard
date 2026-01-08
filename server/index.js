@@ -237,6 +237,30 @@ app.post('/api/sync', async (req, res) => {
   }
 });
 
+app.delete('/api/contacts/:id', async (req, res) => {
+  await connect();
+  const { id } = req.params;
+  try {
+    // Cascading delete: Remove contact AND all associated logs
+    await collections.contacts.deleteOne({ id });
+    await collections.logs.deleteMany({ companyId: id });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+app.delete('/api/logs/:id', async (req, res) => {
+  await connect();
+  const { id } = req.params;
+  try {
+    await collections.logs.deleteOne({ id });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
 // Batch Fetch (Pull to client after login)
 app.get('/api/sync/all', async (req, res) => {
   await connect();
