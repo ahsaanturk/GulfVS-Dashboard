@@ -47,7 +47,10 @@ class DatabaseService {
         if (this.remoteAvailable) {
           console.log('1. Pushing offline changes to server...');
           // 2. PUSH: Send local data to server first (to save offline work)
-          await this.syncToRemote();
+          if (!await this.syncToRemote()) {
+            console.warn('Sync Push failed. Aborting Pull.');
+            return;
+          }
 
           console.log('2. Pulling latest data from server...');
           // 3. PULL: Get merged true state from server
